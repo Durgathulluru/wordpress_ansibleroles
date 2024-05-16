@@ -1,0 +1,18 @@
+---
+# tasks file for php
+- name: install php
+  apt: 
+   name: "{{item}}"
+   state: present
+  with_items:
+       - php
+       - php-fpm
+       - php-enchant
+       - php-mbstring
+       - php-mysql
+       - php-xml
+- name: update cache
+  apt:
+    update_cache: yes
+    
+ 

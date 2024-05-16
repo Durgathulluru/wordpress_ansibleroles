@@ -1,0 +1,20 @@
+---
+- name: deploy wordpress
+  hosts: all
+  become: yes
+  tasks:
+     - name: Update package cache
+       apt:
+        update_cache: yes
+     - name: install python3
+       apt:
+         name: python3
+         state: present
+  roles:
+      
+       - nginx
+       - php
+       - mysql
+       - wordpress
+
+

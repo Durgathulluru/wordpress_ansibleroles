@@ -1,0 +1,44 @@
+---
+# tasks file for mysql
+# name : install mysql server
+- name: Install the MySQL packages
+  apt: 
+   name: "{{ item }}"
+   state: present 
+  with_items:
+    - mysql-server
+    - mysql-client
+    - python3-dev
+    - python3-mysqldb 
+    - libmysqlclient-dev
+- name: update packages
+  apt: 
+   update_cache: yes
+- name: set root user password
+  become_user: root
+  mysql_user:
+     name: root
+     host: "{{ lookup('file', '/home/ubuntu/ansible/myhosts') }}"
+     password: "{{ wp_mysql_password }}"
+     priv: "*.*:ALL,GRANT"
+     
+- name: Create mysql user
+  mysql_user:
+    name: "{{ wp_mysql_user }}"
+    password: "{{ wp_mysql_password }}"
+    priv: "*.*:ALL"
+
+- name: Create mysql database
+  mysql_db:
+    name: "{{ wp_mysql_db }}"
+    state: present
+
+- name: Delete anonymous MySQL server user for localhost
+  action: mysql_user user="" state="absent"
+
+- name: Remove the MySQL test database
+  action: mysql_db db=test state=absent
+
+
+
+
